@@ -137,3 +137,21 @@ managed by this job; edit service links there, not the generated movie entries.
 Back up the private configuration, state, invitations and generated page. No movie files are
 copied by this job. The timer executes the source checkout, so pull/sync source changes and
 refresh its uv environment before using new dependencies.
+
+## Indexer coverage
+
+Manage sources in Prowlarr using its built-in definitions and Test action, then use Sync App
+Indexers to publish them to Radarr. Keep the chosen sync profile: adding sources need not
+turn on automatic downloads. Test both the source and downstream application; a general
+search can pass while a movie-category request fails. Disable unreliable sources rather
+than forcing them through validation. Private sources require an existing membership.
+
+General-purpose sources may classify everything as Other (8000). Include that category
+in the Radarr application's Prowlarr sync categories when using those sources. Radarr
+still matches search results to movies. Anime/TV sources without suitable movie results
+can remain searchable in Prowlarr without appearing in Radarr.
+
+Indexer counts and reported seed counts are not additive. Identical info hashes identify
+the same torrent swarm; multiple trackers and DHT can discover overlapping peers for it.
+Different releases cannot pool pieces just because their movie title matches. qBittorrent
+handles peer discovery; this project does not merge magnets or implement a tracker.
