@@ -34,19 +34,23 @@ browser/audio codec can fail instead of being converted. Use a native player for
 
 ## Channel sources
 
-Jellyfin's native M3U tuner reads `/iptv/channels.m3u`. An M3U file supplies addresses and
-channel IDs; it does not include a TV schedule. Add the filtered XMLTV guide at `/iptv/guide.xml`
-as a native XMLTV listings provider and match channel IDs exactly.
+Jellyfin's native M3U tuner reads the maintained worldwide playlist directly from
+`https://iptv-org.github.io/iptv/index.m3u`. Its guide refresh reloads the source without a
+custom playlist updater. At expansion on September 24 it contained 10,909 stream entries.
+These are not 10,909 verified, distinct channels: alternative feeds, regional restrictions,
+offline sources and incompatible codecs occur. Use Jellyfin search and favorites to find and
+keep useful channels. Importing a listing does not download or play every stream.
 
-The initial deployment has 14 streams selected from iptv-org's sports/news/movie playlists:
-ACC Digital Network, beIN SPORTS XTRA, FloHockey, FloRacing, FUEL TV US, Pac-12 Insider,
-RACER International, SportsGrid, World of Freesports, CBS News Bay Area, DW English,
-France 24 English, LiveNOW from FOX and MovieSphere. These are a starting selection, not a
-complete channel catalogue or a promise of particular live sporting events. Addresses and
-regional availability can change. The original deployment's metadata is in `iptv/channels.json`.
+The original 14-channel test playlist remains in `iptv/channels.m3u` as a rollback option;
+`iptv/channels.json` describes only that test selection, not the full catalogue. The private
+pre-expansion configuration backup is recorded in the deployment runbook.
+
+An M3U playlist does not supply a TV schedule. The filtered XMLTV provider at `/iptv/guide.xml`
+still covers only the selected guide IDs; the full catalogue does not have full guide coverage.
+Channel IDs must match exactly. Channels without listings remain accessible from Channels/search.
 
 Programme data currently comes from the community feed `https://iptv-epg.org/files/epg-us.xml.gz`.
-Only 11 selected channel IDs have matching listings. Channels without guide data remain playable.
+The initial selection had 11 matching channel IDs. Channels without guide data remain playable.
 The feed is large: do not load it into a Python tree or hand its entire contents to Jellyfin.
 The standard XMLTV `tv_grep` utility was tried, but this feed's element ordering produced parser
 warnings and lost fields. The small `watch_link.guide` adapter instead uses defusedxml's
@@ -64,8 +68,22 @@ uv run python -m watch_link.guide \
 `deploy/systemd/` to `~/.config/systemd/user`, then enable `watch-link-guide.timer`.
 They cap the refresh at 256 MiB, one CPU and ten minutes, under an aggregate job slice.
 The timer downloads daily at 03:00 UTC; configure Jellyfin's native Refresh Guide task for
-03:30 UTC. Failed refreshes preserve the previous complete guide. M3U stream addresses are
-currently curated manually; this timer updates schedules, not broken channel URLs.
+03:30 UTC. Failed refreshes preserve the previous complete guide. This timer updates schedules. Jellyfin independently reloads the upstream playlist during its
+native guide refresh; neither refresh proves every source can play.
+
+## Large catalogues and browser layout
+
+Jellyfin 12.1.0's modern channel-list request omits `limit` in this deployment. Rendering the
+worldwide catalogue exhausted a headless browser's 768 MiB cap. Jellyfin itself did not restart.
+The built-in **Desktop (Legacy)** layout requests 100 channels per page and passed the same test.
+Choose it under user Settings → Display → Layout before opening the full Channels list. This
+is a per-browser preference; changing server display preferences does not force it on every device.
+Keep Library page size at 100 or lower; zero disables pagination. The modern view did not honor
+that setting in the observed request. Search/favorites avoid paging through the whole catalogue.
+
+No browser bundle is patched. The upstream legacy layout is the current workaround; do not call
+the default modern view safe for this catalogue. Related upstream report:
+https://github.com/jellyfin/jellyfin-web/issues/7603 (guide performance, not the identical channel-view bug).
 
 ## Verify and maintain
 

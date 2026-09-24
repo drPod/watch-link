@@ -41,3 +41,12 @@ matching guide listings (1,461 programmes at setup).
 The filtered guide refresh completed under a 256 MiB job cap with approximately 15 MiB peak
 memory. A disposable 64 MiB job was killed by its own cgroup on a 128 MiB allocation while the
 interactive session remained available. Limits cover explicitly scoped jobs, not all agent commands.
+
+### Worldwide catalogue expansion
+
+The upstream M3U had 10,909 stream entries; they have not all been playback-tested. Native
+channel-name search returned matches. The default modern Channels view omitted its page limit
+and exhausted the test browser cgroup. The built-in Desktop (Legacy) view requested Limit=100
+and displayed the first page successfully under the same 768 MiB cap. Jellyfin stayed running
+without a container restart or OOM event. The large guide refresh was still running during this
+check; initial import count can include stale entries until it completes.
