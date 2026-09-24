@@ -66,3 +66,30 @@ Image digests and direct Mac installer checksums are pinned. Update from upstrea
 verify checksums and rerun checks before issuing new invitations. Homebrew/WinGet resolve their
 current curated packages. Keep previous Caddy configuration and invitation directory snapshots.
 Reverting source does not change already-issued launchers. Restore their snapshot or issue new ones.
+
+## Optional password-free dashboard links
+
+`deploy/dashboard-access.Caddyfile.example` uses only native Caddy path, cookie and
+Origin matchers. Replace all secret placeholders with one cryptographically random token
+(at least 32 random bytes) per hostname. The private `/access/TOKEN` link sets a Secure,
+HttpOnly, host-only, SameSite=Lax cookie and redirects to `/`. Cookies last 30 days;
+bookmark links remain valid until rotated. No directory or certificate record reveals
+the token, but anyone receiving the link has dashboard administrator access.
+
+Radarr can retain External authentication behind this gate. To apply the same pattern to
+qBittorrent, use its hostname, a different token and upstream `gluetun:8080`. Preserve the
+public Host/Origin headers. Keep CSRF enabled. qBittorrent's native **authentication subnet
+whitelist** can trust only Caddy's exact transport IP (/32), with reverse-proxy IP handling
+disabled; otherwise the forwarded viewer IP can defeat that matching. Keep native credentials
+for Radarr and direct access. Never whitelist a whole subnet or publish the backend publicly.
+A changed Caddy container IP requires an explicit whitelist update. Trust the Docker network.
+
+Back up the proxy config and qBittorrent preferences before changing authentication. Validate
+and reload Caddy's gate before enabling the proxy-only native-login bypass. Verify anonymous,
+wrong-token and cross-origin requests fail; the private link reaches both UI and API; direct
+unauthenticated qBittorrent API access fails; and Radarr's download-client test still passes.
+
+Store actual links in `~/deploy/media-stack/PRIVATE-LINKS.md` and `dashboard-links.json`, mode600.
+An optional Mac copy lives in `~/Movies/VPS-Media/PRIVATE-LINKS.md`. The private operations
+runbook points there. Keep secrets out of this repository. Rotate both the entry path and
+cookie comparison to invalidate a dashboard link and its existing browser cookies.

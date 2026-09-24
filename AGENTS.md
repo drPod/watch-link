@@ -24,3 +24,7 @@ Read README.md, docs/OPERATIONS.md and docs/VERIFICATION.md first.
 Code: watch_link/cli.py creates/revokes static invitations; templates/ owns local launchers.
 Deployment: deploy/ contains reusable Compose/Caddy examples; docs/SERVER.md is the server guide.
 Private local runbook, when present: ~/.local/state/watch-link/OPERATIONS.md. Never publish it.
+
+Private dashboard links, when configured, are in `~/deploy/media-stack/PRIVATE-LINKS.md`
+and `dashboard-links.json`; Mac copy `~/Movies/VPS-Media/PRIVATE-LINKS.md`. Read locally,
+never put their contents in commits. See docs/OPERATIONS.md for cookie access and rotation.
