@@ -1,5 +1,7 @@
 # Watch Link
 
+[![Checks](https://github.com/drPod/watch-link/actions/workflows/checks.yml/badge.svg)](https://github.com/drPod/watch-link/actions/workflows/checks.yml)
+
 **One invitation command. Your existing player. Optional watch-together.**
 
 Watch Link connects Caddy, IINA/VLC/mpv and Syncplay to a private VPS movie library.

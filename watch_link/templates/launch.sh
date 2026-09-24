@@ -43,12 +43,7 @@ watch_main() (
     fi
     tmp=$(mktemp -d)
     mounted=0
-    # shellcheck disable=SC2329
-    cleanup() {
-        if ((mounted)); then hdiutil detach "$tmp/mount" -quiet || true; fi
-        rm -rf "$tmp"
-    }
-    trap cleanup EXIT
+    trap 'if ((mounted)); then hdiutil detach "$tmp/mount" -quiet || true; fi; rm -rf "$tmp"' EXIT
     install_dmg() {
         local name=$1 url=$2 checksum=$3
         echo "Downloading $name from its official release…"
