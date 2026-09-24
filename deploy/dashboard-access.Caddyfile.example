@@ -7,7 +7,7 @@ radarr.example.com {
  }
  handle /access/REPLACE_WITH_RANDOM_SECRET {
   header Set-Cookie "__Host-media_access=REPLACE_WITH_RANDOM_SECRET; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=2592000"
-  redir / 303
+  redir * / 303
  }
  @authorized expression `{http.request.cookie.__Host-media_access} == "REPLACE_WITH_RANDOM_SECRET"`
  handle @authorized {
