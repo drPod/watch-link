@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Media home</title>
+<style>
+:root{color-scheme:light dark;font:17px/1.5 system-ui,sans-serif;background:#11151a;color:#e8edf2}
+*{box-sizing:border-box}body{max-width:960px;margin:0 auto;padding:40px 22px}h1{margin-bottom:4px}h2{margin-top:36px}
+p{color:#b8c3cf}a{color:#a9d5ff}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #a9d5ff;outline-offset:4px}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.service,article{border:1px solid #39434e;border-radius:12px;padding:20px;background:#1a2028}.service{text-decoration:none}.service:hover{border-color:#a9d5ff}
+.service strong,.service span{display:block}.service span{color:#b8c3cf;font-size:15px;margin-top:6px}
+article{margin:18px 0}h3{margin-top:0}select,button{font:inherit;border:1px solid #697789;border-radius:6px;padding:8px 12px;background:#202b37;color:#fff}
+button{cursor:pointer;background:#a9d5ff;color:#101820}label{display:inline-flex;gap:12px;align-items:center}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#10151c;padding:16px;border-radius:6px;font-size:14px}
+.actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.status{min-height:1.5em;margin-bottom:0}footer{margin-top:36px;color:#b8c3cf;font-size:14px}
+</style>
+<main>
+<h1>Media home</h1>
+<p>Find something, check downloads, or start watching.</p>
+<nav class="services" aria-label="Media services">@@SERVICES@@</nav>
+<h2>Watch in your player</h2>
+<p>Copy a command into Terminal on Mac or PowerShell on Windows. Your browser cannot run it directly.</p>
+<label>Your computer <select id="platform"><option value="mac">Mac</option><option value="windows">Windows</option></select></label>
+@@MOVIES@@
+<p>Solo uses an existing player, with browser fallback. Together uses Syncplay; both people should run the same command and leave the terminal open. Installation may ask for permission.</p>
+<details><summary>Jellyfin channel browsing</summary><p>For the large TV catalogue, choose Settings → Display → Layout → Desktop (Legacy). This loads 100 channels per page. The current modern view can overload a tab. Stream availability and guide coverage vary.</p></details>
+</main>
+<footer>This private page includes workspace and download-management access. Share a playback command with a guest, rather than this whole page.</footer>
+<script>
+const platform = document.querySelector('#platform');
+platform.value = /Windows/i.test(navigator.userAgent) ? 'windows' : 'mac';
+function update(article) {
+  const option = article.querySelector('.mode').selectedOptions[0];
+  article.querySelector('code').textContent = option.dataset[platform.value];
+  const url = option.dataset.url + (platform.value === 'mac' ? '/mac' : '/windows.ps1');
+  article.querySelector('.inspect').href = url;
+  const download = article.querySelector('.download');
+  download.href = url;
+  download.download = platform.value === 'mac' ? 'watch-link.sh' : 'watch-link.ps1';
+  article.querySelector('.status').textContent = '';
+}
+for (const article of document.querySelectorAll('article')) {
+  article.querySelector('.mode').addEventListener('change', () => update(article));
+  article.querySelector('.copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(article.querySelector('code').textContent);
+      article.querySelector('.status').textContent = 'Copied. Paste into ' + (platform.value === 'mac' ? 'Terminal.' : 'PowerShell.');
+    } catch {
+      article.querySelector('.status').textContent = 'Select and copy the command above.';
+    }
+  });
+  update(article);
+}
+platform.addEventListener('change', () => document.querySelectorAll('article').forEach(update));
+</script>
+</html>

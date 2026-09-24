@@ -1,0 +1,10 @@
+{
+  "services": [
+    {"name": "Movies & Live TV", "description": "Jellyfin", "url": "https://tv.example.com/access/PRIVATE_TOKEN"},
+    {"name": "Downloads", "description": "qBittorrent", "url": "https://downloads.example.com/access/PRIVATE_TOKEN"},
+    {"name": "Workspace", "description": "Browser VS Code", "url": "https://workspace.example.com/#key=PRIVATE_TOKEN"}
+  ],
+  "movies": [
+    {"name": "Example movie", "solo": "https://watch.example.com/i/SOLO_TOKEN", "sync": "https://watch.example.com/i/SYNC_TOKEN"}
+  ]
+}

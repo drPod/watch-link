@@ -50,3 +50,9 @@ and exhausted the test browser cgroup. The built-in Desktop (Legacy) view reques
 and displayed the first page successfully under the same 768 MiB cap. Jellyfin stayed running
 without a container restart or OOM event. The large guide refresh was still running during this
 check; initial import count can include stale entries until it completes.
+
+### Private start page
+
+Headless Chromium verified service links, Mac/Windows solo/together command copying and script
+downloads. The layout fits a 390-pixel viewport. Unknown page tokens and directory requests return
+404. The workspace link is matched to the active conversation in the private workspace registry.

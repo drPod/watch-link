@@ -31,3 +31,7 @@ never put their contents in commits. See docs/OPERATIONS.md for cookie access an
 
 Guide refresh uses `watch_link/guide.py` and resource-limited native systemd units in
 `deploy/systemd/`. Read docs/JELLYFIN.md. Never parse the full community XMLTV feed into memory.
+
+Private service start page: `watch_link/dashboard.py` renders `templates/dashboard.html` from a
+private JSON config. Never commit generated HTML containing capability links. Browser buttons
+copy/download launchers; they must not imply they can execute shell commands directly.

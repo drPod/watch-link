@@ -93,3 +93,17 @@ Store actual links in `~/deploy/media-stack/PRIVATE-LINKS.md` and `dashboard-lin
 An optional Mac copy lives in `~/Movies/VPS-Media/PRIVATE-LINKS.md`. The private operations
 runbook points there. Keep secrets out of this repository. Rotate both the entry path and
 cookie comparison to invalidate a dashboard link and its existing browser cookies.
+
+## Private start page
+
+`python -m watch_link.dashboard --config /PRIVATE/dashboard.json --output /PRIVATE/TOKEN/index.html`
+creates a static HTML page from `deploy/dashboard.example.json`'s shape. It lists service links
+and existing movie invitations, with Mac/Windows and solo/together choices. Copy/download uses
+the existing launchers; a browser cannot directly execute shell commands. Add newly generated
+invitations to the private config and regenerate the page. No application server is needed.
+
+Serve the page through an exact, random-token Caddy path, with HTML content type, no-store and
+no-referrer headers. If it lives under the invitation file-server root, its directory name must
+also be secret; never store it at a guessable `dashboard.html` there. Keep the generated page and
+config outside Git. A personal page containing workspace and management links grants that access;
+share individual movie invitation commands with viewers. Rotate the page token if disclosed.

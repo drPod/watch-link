@@ -76,6 +76,11 @@ flowchart LR
     Caddy --> Browser
 ```
 
+## Private start page
+
+A basic static page can collect service/workspace links and copyable playback commands.
+Use `python -m watch_link.dashboard` with a private config; see [operations](docs/OPERATIONS.md#private-start-page).
+
 ## Status
 
 This is an early integration. Mac detection and launcher branches are tested; Windows
