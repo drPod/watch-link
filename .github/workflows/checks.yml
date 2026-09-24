@@ -14,7 +14,7 @@ jobs:
       - run: shellcheck watch_link/templates/launch.sh
       - run: |
           docker run --rm -v "$PWD/deploy:/config:ro" caddy:2 caddy adapt --config /config/dashboard-access.Caddyfile.example --adapter caddyfile | uv run python tests/check_dashboard_config.py
-      - run: MEDIA_ROOT=/tmp/media docker compose -f deploy/compose.yml --profile vpn config -q
+      - run: MEDIA_ROOT=/tmp/media docker compose -f deploy/compose.yml -f deploy/compose.jellyfin.yml --profile vpn config -q
   powershell:
     runs-on: windows-latest
     steps:

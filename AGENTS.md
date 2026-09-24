@@ -28,3 +28,6 @@ Private local runbook, when present: ~/.local/state/watch-link/OPERATIONS.md. Ne
 Private dashboard links, when configured, are in `~/deploy/media-stack/PRIVATE-LINKS.md`
 and `dashboard-links.json`; Mac copy `~/Movies/VPS-Media/PRIVATE-LINKS.md`. Read locally,
 never put their contents in commits. See docs/OPERATIONS.md for cookie access and rotation.
+
+Guide refresh uses `watch_link/guide.py` and resource-limited native systemd units in
+`deploy/systemd/`. Read docs/JELLYFIN.md. Never parse the full community XMLTV feed into memory.

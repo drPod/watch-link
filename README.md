@@ -8,7 +8,7 @@ Watch Link connects Caddy, IINA/VLC/mpv and Syncplay to a private VPS movie libr
 It also includes the server configuration for Radarr, Prowlarr, qBittorrent and
 Gluetun. Playback, downloads and synchronization stay with those upstream projects.
 
-[Server setup](docs/SERVER.md) · [Invitations](docs/INVITATIONS.md) ·
+[Server setup](docs/SERVER.md) · [Browser TV / Jellyfin](docs/JELLYFIN.md) · [Invitations](docs/INVITATIONS.md) ·
 [Operations](docs/OPERATIONS.md) · [Verification](docs/VERIFICATION.md) · [Agent guide](AGENTS.md)
 
 ## What viewers do

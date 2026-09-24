@@ -1,0 +1,14 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin@sha256:78d3ea1207d1322471fcac39a614f004f2ccf7e878f95ab2977d752f07e4dd7e
+    restart: unless-stopped
+    user: "0:0"
+    ports: ["127.0.0.1:18096:8096"]
+    volumes:
+      - ./config/jellyfin:/config
+      - ./cache/jellyfin:/cache
+      - ./iptv:/iptv:ro
+      - ${MEDIA_ROOT:?Set MEDIA_ROOT}/movies:/media/movies:ro
+    networks: [web]
+    mem_limit: 1g
+    cpus: 1.5

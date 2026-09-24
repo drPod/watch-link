@@ -15,6 +15,10 @@ No player, Syncplay source, or installer binary is vendored here.
 | [Radarr](https://radarr.video/) / [Prowlarr](https://prowlarr.com/) | Existing apps and native APIs |
 | [LinuxServer](https://docs.linuxserver.io/) | Radarr/Prowlarr/qBittorrent container images |
 | [Homebrew](https://brew.sh/) / [WinGet](https://github.com/microsoft/winget-cli) | Existing package installation |
+| [Jellyfin](https://jellyfin.org/) | Browser UI, media library, M3U tuner and XMLTV guide |
+| [iptv-org](https://github.com/iptv-org/iptv) / [iptv-epg](https://iptv-epg.org/) | Public stream catalogue and community programme data |
+| [defusedxml](https://github.com/tiran/defusedxml) | Streaming XML parsing with entity protections |
+| [systemd](https://systemd.io/) | Scheduled refresh and cgroup resource limits |
 | [rsnapshot](https://rsnapshot.org/) | Optional backup retention |
 
 Server templates originated in [drPod/vps-workspaces](https://github.com/drPod/vps-workspaces),

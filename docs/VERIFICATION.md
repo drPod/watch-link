@@ -29,3 +29,15 @@ unknown tokens and directory listings. Existing media services remained healthy.
 - Browser codecs, HDR, audio passthrough and available bandwidth vary by device.
 - Revoking a launcher doesn't invalidate an original media URL already disclosed.
 - No custom URL handler or signed installer is installed. Run the invitation command each time.
+
+## Jellyfin and resource limits (2026-09-24)
+
+Authenticated browser playback passed in headless Chromium: ACC Digital Network played at
+1920×1080 with its clock advancing; FFmpeg copied both video and audio (remux only).
+The Truman Show played at 1918×1080 with no player error. This does not certify every channel
+or Safari/device codec combination. Fourteen channel manifests were available; eleven have
+matching guide listings (1,461 programmes at setup).
+
+The filtered guide refresh completed under a 256 MiB job cap with approximately 15 MiB peak
+memory. A disposable 64 MiB job was killed by its own cgroup on a 128 MiB allocation while the
+interactive session remained available. Limits cover explicitly scoped jobs, not all agent commands.

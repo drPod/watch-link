@@ -1,0 +1,13 @@
+[Unit]
+Description=Refresh the selected XMLTV channels for Jellyfin
+
+[Service]
+Type=oneshot
+Slice=agent-jobs.slice
+WorkingDirectory=%h/Coding/watch-link
+ExecStart=%h/Coding/watch-link/.venv/bin/python -m watch_link.guide --url https://iptv-epg.org/files/epg-us.xml.gz --channels %h/deploy/media-stack/iptv/guide-channels.txt --output %h/deploy/media-stack/iptv/guide.xml
+MemoryHigh=128M
+MemoryMax=256M
+CPUQuota=100%
+Nice=10
+TimeoutStartSec=10min
