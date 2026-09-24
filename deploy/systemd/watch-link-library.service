@@ -1,0 +1,13 @@
+[Unit]
+Description=Update the private media home from the Jellyfin movie library
+
+[Service]
+Type=oneshot
+Slice=agent-jobs.slice
+UMask=0077
+WorkingDirectory=%h/Coding/watch-link
+ExecStart=%h/Coding/watch-link/.venv/bin/python -m watch_link.library --config %h/deploy/media-stack/library.json
+MemoryHigh=64M
+MemoryMax=128M
+CPUQuota=25%
+TimeoutStartSec=60

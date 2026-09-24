@@ -1,6 +1,8 @@
 import argparse
 import json
+import os
 import shlex
+import tempfile
 from html import escape
 from pathlib import Path
 
@@ -33,7 +35,21 @@ def render(config: dict[str, list[dict[str, str]]]) -> str:
             '<a class="download" download>Download script</a></div><p class="status" aria-live="polite"></p></article>'
         )
     template = Path(__file__).with_name("templates").joinpath("dashboard.html").read_text()
-    return template.replace("@@SERVICES@@", services).replace("@@MOVIES@@", "".join(movies))
+    return template.replace("@@SERVICES@@", services).replace(
+        "@@MOVIES@@", ("".join(movies) or "<p>No movies are available yet.</p>")
+    )
+
+
+def write_private(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    fd, name = tempfile.mkstemp(dir=path.parent)
+    temporary = Path(name)
+    try:
+        with os.fdopen(fd, "w") as output:
+            output.write(content)
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def main() -> None:
@@ -42,9 +58,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     page = render(json.loads(args.config.read_text()))
-    args.output.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-    args.output.write_text(page)
-    args.output.chmod(0o600)
+    write_private(args.output, page)
 
 
 if __name__ == "__main__":

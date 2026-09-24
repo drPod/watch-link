@@ -56,3 +56,12 @@ check; initial import count can include stale entries until it completes.
 Headless Chromium verified service links, Mac/Windows solo/together command copying and script
 downloads. The layout fits a 390-pixel viewport. Unknown page tokens and directory requests return
 404. The workspace link is matched to the active conversation in the private workspace registry.
+
+### Automatic movie list
+
+A focused test covers new invitations, stable link identities on repeated refreshes, removal of
+missing files, and retaining the previous page during an API outage. The live systemd job reports
+one available movie and preserves the existing Truman Show invitations. Browser checks exercise
+all four platform/mode command and download combinations plus an injected inventory update,
+without reloading or losing the existing OS/playback selections. Prowlarr opens through its
+private link with the indexer UI loaded and no authentication errors.

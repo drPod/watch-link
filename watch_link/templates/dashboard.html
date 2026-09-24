@@ -22,7 +22,8 @@ button{cursor:pointer;background:#a9d5ff;color:#101820}label{display:inline-flex
 <h2>Watch in your player</h2>
 <p>Copy a command into Terminal on Mac or PowerShell on Windows. Your browser cannot run it directly.</p>
 <label>Your computer <select id="platform"><option value="mac">Mac</option><option value="windows">Windows</option></select></label>
-@@MOVIES@@
+<section id="movies" aria-label="Available movies">@@MOVIES@@</section>
+<p>Available movies update automatically after Jellyfin discovers their files.</p>
 <p>Solo uses an existing player, with browser fallback. Together uses Syncplay; both people should run the same command and leave the terminal open. Installation may ask for permission.</p>
 <details><summary>Jellyfin channel browsing</summary><p>For the large TV catalogue, choose Settings → Display → Layout → Desktop (Legacy). This loads 100 channels per page. The current modern view can overload a tab. Stream availability and guide coverage vary.</p></details>
 </main>
@@ -40,6 +41,7 @@ function update(article) {
   download.download = platform.value === 'mac' ? 'watch-link.sh' : 'watch-link.ps1';
   article.querySelector('.status').textContent = '';
 }
+function bindMovies() {
 for (const article of document.querySelectorAll('article')) {
   article.querySelector('.mode').addEventListener('change', () => update(article));
   article.querySelector('.copy').addEventListener('click', async () => {
@@ -52,6 +54,26 @@ for (const article of document.querySelectorAll('article')) {
   });
   update(article);
 }
+}
+bindMovies();
 platform.addEventListener('change', () => document.querySelectorAll('article').forEach(update));
+const movies = document.querySelector('#movies');
+let movieMarkup = movies.innerHTML;
+setInterval(async () => {
+  if (document.hidden) return;
+  try {
+    const response = await fetch(location.href, {cache: 'no-store'});
+    if (!response.ok) return;
+    const next = new DOMParser().parseFromString(await response.text(), 'text/html').querySelector('#movies');
+    if (!next || next.innerHTML === movieMarkup) return;
+    movieMarkup = next.innerHTML;
+    const modes = new Map([...movies.querySelectorAll('article')].map(article => [article.querySelector('h3').textContent, article.querySelector('.mode').selectedIndex]));
+    movies.innerHTML = movieMarkup;
+    for (const article of movies.querySelectorAll('article')) {
+      article.querySelector('.mode').selectedIndex = modes.get(article.querySelector('h3').textContent) ?? 0;
+    }
+    bindMovies();
+  } catch {}
+}, 30000);
 </script>
 </html>

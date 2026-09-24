@@ -99,8 +99,8 @@ cookie comparison to invalidate a dashboard link and its existing browser cookie
 `python -m watch_link.dashboard --config /PRIVATE/dashboard.json --output /PRIVATE/TOKEN/index.html`
 creates a static HTML page from `deploy/dashboard.example.json`'s shape. It lists service links
 and existing movie invitations, with Mac/Windows and solo/together choices. Copy/download uses
-the existing launchers; a browser cannot directly execute shell commands. Add newly generated
-invitations to the private config and regenerate the page. No application server is needed.
+the existing launchers; a browser cannot directly execute shell commands. For a manual page, add invitations to the private config and regenerate. For automatic movie
+updates, use the library timer below. No application server is needed.
 
 Use `deploy/start-page.Caddyfile.example` inside the existing watch site, preserving its media
 streaming route. Mount the private output root read-only at `/srv/watch-link`. Generate the page
@@ -111,3 +111,29 @@ no-referrer headers. If it lives under the invitation file-server root, its dire
 also be secret; never store it at a guessable `dashboard.html` there. Keep the generated page and
 config outside Git. A personal page containing workspace and management links grants that access;
 share individual movie invitation commands with viewers. Rotate the page token if disclosed.
+
+
+## Automatic available movies
+
+`watch_link.library` queries Jellyfin's native movie inventory, verifies each file exists under
+its configured host movie root, and updates the page with solo/together invitations. It does not
+scan download queues or label incomplete downloads as available. Jellyfin must discover a newly
+imported movie first. If the API fails, the last successful page remains intact.
+
+Copy `deploy/library.example.json` to a private location and fill in paths. `auth_file` contains
+`{"token":"JELLYFIN_API_TOKEN"}`; use a native Jellyfin API token and keep it private. The
+Jellyfin container path and host path may differ. `media_base` must serve the movie root through
+Caddy. The state file preserves invitation URLs and Syncplay rooms across refreshes; preserve
+it during migration. Removing a file removes its page entry but does not revoke previously
+shared invitations. Files or renamed paths added later get new invitations.
+
+Run `uv run python -m watch_link.library --config /PRIVATE/library.json`. Install/adapt
+`deploy/systemd/watch-link-library.service` and `.timer`, then enable the timer. The original
+installation runs every minute with a 128 MiB cap. The open start page checks for updated movie
+entries every 30 seconds while visible, keeping the selected OS and existing playback choices.
+Writes are atomic and overlapping refreshes are locked. The movie list in dashboard.json is
+managed by this job; edit service links there, not the generated movie entries.
+
+Back up the private configuration, state, invitations and generated page. No movie files are
+copied by this job. The timer executes the source checkout, so pull/sync source changes and
+refresh its uv environment before using new dependencies.

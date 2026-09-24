@@ -7,6 +7,7 @@ Read README.md, docs/OPERATIONS.md and docs/VERIFICATION.md first.
 | Task | Start here |
 |---|---|
 | Private service home / workspace link | `watch_link/dashboard.py`, `watch_link/templates/dashboard.html` |
+| Automatic movie inventory | `watch_link/library.py`, `deploy/library.example.json`, `watch-link-library.timer` |
 | Playback invitations and scripts | `watch_link/cli.py`, `watch_link/templates/launch.sh`, `launch.ps1` |
 | Containers, VPN and proxy | `deploy/`, `docs/SERVER.md` |
 | Jellyfin channels and guide refresh | `docs/JELLYFIN.md`, `watch_link/guide.py`, `deploy/systemd/` |
@@ -68,3 +69,7 @@ copy/download launchers; they must not imply they can execute shell commands dir
 Start-page configuration examples: `deploy/dashboard.example.json` and
 `deploy/start-page.Caddyfile.example`. Keep all reusable media implementation in this repository;
 VPS Workspaces remains responsible only for the linked workspace and shared backup infrastructure.
+
+When the library timer is enabled, it owns `dashboard.json` movie entries. Read the automatic
+movies section in OPERATIONS.md; preserve its private state file so shared room/link identities
+remain stable. Service links stay manually configurable.

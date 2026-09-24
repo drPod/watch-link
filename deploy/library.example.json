@@ -1,0 +1,13 @@
+{
+  "jellyfin_url": "http://127.0.0.1:18096",
+  "auth_file": "/PRIVATE/jellyfin-access.json",
+  "movie_root": "/srv/media/movies",
+  "jellyfin_root": "/media/movies",
+  "media_base": "https://watch.example.com/PRIVATE_MEDIA_PATH",
+  "invitation_base": "https://watch.example.com/i",
+  "invitation_output": "/PRIVATE/invitations",
+  "dashboard_config": "/PRIVATE/dashboard.json",
+  "dashboard_output": "/PRIVATE/invitations/HOME_TOKEN/index.html",
+  "state_file": "/PRIVATE/library-state.json",
+  "syncplay_server": "syncplay.pl:8999"
+}

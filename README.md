@@ -79,7 +79,9 @@ flowchart LR
 ## Private start page
 
 A basic static page can collect service/workspace links and copyable playback commands.
-Use `python -m watch_link.dashboard` with a private config; see [operations](docs/OPERATIONS.md#private-start-page).
+Use `python -m watch_link.dashboard` with a private config. The optional library timer keeps
+movie invitations current from Jellyfin and the open page updates automatically. See
+[operations](docs/OPERATIONS.md#private-start-page).
 
 ## Status
 
