@@ -56,7 +56,7 @@ watch_main() (
         ditto "$tmp/mount/$name.app" "$HOME/Applications/$name.app"
         xattr -w com.apple.quarantine "0083;$(printf '%x' "$(date +%s)");Watch Link;" "$HOME/Applications/$name.app"
         hdiutil detach "$tmp/mount" -quiet
-            if ! spctl --assess --type execute "$HOME/Applications/$name.app"; then
+        if ! spctl --assess --type execute "$HOME/Applications/$name.app"; then
             open "$HOME/Applications/$name.app" || true
             echo "macOS needs your approval for $name. Approve it in Privacy & Security, open it once, then rerun this invitation."
             exit 1

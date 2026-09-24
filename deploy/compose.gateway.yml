@@ -1,0 +1,12 @@
+services:
+  gateway:
+    image: caddy@sha256:df7f1c2fb114453b951de51a98efc010db1655a92c2e86be6706714e2417a78d
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./invitations:/srv/watch-link:ro
+      - ./config/gateway-data:/data
+      - ./config/gateway-config:/config
+    networks: [web]
+    mem_limit: 128m

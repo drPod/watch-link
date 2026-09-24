@@ -4,6 +4,17 @@ This independent Compose stack reuses Radarr, Prowlarr, qBittorrent, Gluetun and
 It does not change workspace services or route the host through a VPN. IINA plays the
 original files; Syncplay coordinates playback on participating computers.
 
+## Prerequisites
+
+A Linux VPS with rootless Docker Compose, writable storage, DNS names pointing at it,
+and reachable ports 80/443. Configure rootless Docker's privileged-port handling using
+[Docker's documentation](https://docs.docker.com/engine/security/rootless/); don't switch
+this template to a rootful daemon without adjusting container identities.
+
+Create the shared network once with `docker network create web` if it doesn't exist.
+Use an existing Caddy proxy, or the optional `compose.gateway.yml` below. No workspace
+software, HAPI, cmux or code-server is required for this stack.
+
 ## Deploy
 
 Copy `deploy/` to a private directory outside the synchronized source checkout.
@@ -43,6 +54,26 @@ require restarting qBittorrent.
 
 Images are pinned by digest. Update them deliberately after reading upstream release notes.
 No custom firewall, search scraper, download daemon or player is included.
+
+## Standalone gateway
+
+If you don't already have Caddy, copy `Caddyfile.example` to `Caddyfile` in your private
+Compose directory. Replace every example domain, password hash and stream-path secret.
+Create the private `invitations` directory before starting the gateway. Configure the
+applications' authentication before exposing their routes, as described above.
+
+```sh
+mkdir -p invitations
+chmod 700 invitations
+docker compose -f compose.yml -f compose.gateway.yml run --rm --no-deps gateway \
+  caddy validate --config /etc/caddy/Caddyfile
+docker compose -f compose.yml -f compose.gateway.yml --profile vpn up -d
+```
+
+Use both Compose filenames for subsequent operations on this deployment. Existing proxy
+users should omit the gateway override and add the example routes/mount to their proxy.
+Generate invitations with `--output /absolute/path/to/this/deployment/invitations` and
+`--base-url https://YOUR_WATCH_HOST/i`. See [invitations](INVITATIONS.md).
 
 ## Storage and selection
 

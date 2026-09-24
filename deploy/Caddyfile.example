@@ -12,6 +12,12 @@ prowlarr.example.com {
 }
 watch.example.com {
  header Referrer-Policy no-referrer
+ handle_path /i/* {
+  root * /srv/watch-link
+  header Content-Type "text/plain; charset=utf-8"
+  header Cache-Control "no-store"
+  file_server
+ }
  handle_path /REPLACE_WITH_RANDOM_SECRET/* {
   reverse_proxy media-stack-media-files-1:8080
  }
