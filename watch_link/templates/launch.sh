@@ -42,8 +42,7 @@ watch_main() (
         exit 0
     fi
     tmp=$(mktemp -d)
-    mounted=0
-    trap 'if ((mounted)); then hdiutil detach "$tmp/mount" -quiet || true; fi; rm -rf "$tmp"' EXIT
+    trap 'hdiutil detach "$tmp/mount" -quiet 2>/dev/null || true; rm -rf "$tmp"' EXIT
     install_dmg() {
         local name=$1 url=$2 checksum=$3
         echo "Downloading $name from its official release…"
@@ -51,15 +50,13 @@ watch_main() (
         printf '%s  %s\n' "$checksum" "$tmp/app.dmg" | shasum -a 256 -c -
         mkdir -p "$tmp/mount" "$HOME/Applications"
         hdiutil attach "$tmp/app.dmg" -readonly -nobrowse -mountpoint "$tmp/mount" -quiet
-        mounted=1
         if [[ -e "$HOME/Applications/$name.app" ]]; then
             echo "Existing $name app could not be used. Please repair it before rerunning." >&2; exit 1
         fi
         ditto "$tmp/mount/$name.app" "$HOME/Applications/$name.app"
         xattr -w com.apple.quarantine "0083;$(printf '%x' "$(date +%s)");Watch Link;" "$HOME/Applications/$name.app"
         hdiutil detach "$tmp/mount" -quiet
-        mounted=0
-        if ! spctl --assess --type execute "$HOME/Applications/$name.app"; then
+            if ! spctl --assess --type execute "$HOME/Applications/$name.app"; then
             open "$HOME/Applications/$name.app" || true
             echo "macOS needs your approval for $name. Approve it in Privacy & Security, open it once, then rerun this invitation."
             exit 1
