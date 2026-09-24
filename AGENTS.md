@@ -2,6 +2,35 @@
 
 Read README.md, docs/OPERATIONS.md and docs/VERIFICATION.md first.
 
+## Find the implementation
+
+| Task | Start here |
+|---|---|
+| Private service home / workspace link | `watch_link/dashboard.py`, `watch_link/templates/dashboard.html` |
+| Playback invitations and scripts | `watch_link/cli.py`, `watch_link/templates/launch.sh`, `launch.ps1` |
+| Containers, VPN and proxy | `deploy/`, `docs/SERVER.md` |
+| Jellyfin channels and guide refresh | `docs/JELLYFIN.md`, `watch_link/guide.py`, `deploy/systemd/` |
+| Verification and known limitations | `docs/VERIFICATION.md` |
+| Live installation and private links | `~/.local/state/watch-link/OPERATIONS.md` (never publish) |
+
+## Change the deployed start page
+
+1. Read the private runbook. On the original VPS, `~/deploy/media-stack/dashboard.json` owns
+   service labels/URLs and movie invitations; `dashboard-links.json` records private entry links.
+2. Edit the source template here or the private config as appropriate. Regenerate with
+   `uv run python -m watch_link.dashboard --config /PRIVATE/dashboard.json --output /PRIVATE/TOKEN/index.html`.
+   Preserve the deployed token/output path unless intentionally rotating access.
+3. Verify page HTML, service destinations, Mac/Windows solo/together copy/download controls and
+   unknown-path rejection. Static page edits need no Caddy reload. Proxy edits require validation.
+4. Keep `PRIVATE-LINKS.md`, the Mac shortcut and private runbook current if URLs change. Preserve
+   both-machine configuration backups. Source synchronization alone does not regenerate the page.
+
+The workspace link is owned by VPS Workspaces: use its `remote.py link <workspace>` command.
+Check the registry's `hapi_session` against the intended conversation before changing that link.
+Do not fork or restart the agent just to add a browser link.
+
+## Working rules
+
 - Reuse Caddy, Syncplay, upstream players, WinGet/Homebrew and official installers.
   Do not implement a player, synchronization engine, scraper or VPN firewall.
 - Preserve the player-first policy in both modes. Solo defaults to browser fallback;
