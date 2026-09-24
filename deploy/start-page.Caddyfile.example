@@ -1,0 +1,19 @@
+watch.example.com {
+ header Referrer-Policy no-referrer
+ header Cache-Control no-store
+ handle /home/REPLACE_WITH_RANDOM_TOKEN {
+  root * /srv/watch-link
+  rewrite * /REPLACE_WITH_RANDOM_TOKEN/index.html
+  header Content-Type "text/html; charset=utf-8"
+  header X-Robots-Tag "noindex, nofollow"
+  file_server
+ }
+ handle_path /i/* {
+  root * /srv/watch-link
+  header Content-Type "text/plain; charset=utf-8"
+  file_server
+ }
+ handle {
+  respond "Not found" 404
+ }
+}

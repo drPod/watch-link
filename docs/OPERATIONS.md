@@ -102,6 +102,10 @@ and existing movie invitations, with Mac/Windows and solo/together choices. Copy
 the existing launchers; a browser cannot directly execute shell commands. Add newly generated
 invitations to the private config and regenerate the page. No application server is needed.
 
+Use `deploy/start-page.Caddyfile.example` inside the existing watch site, preserving its media
+streaming route. Mount the private output root read-only at `/srv/watch-link`. Generate the page
+under the same random token used in the route.
+
 Serve the page through an exact, random-token Caddy path, with HTML content type, no-store and
 no-referrer headers. If it lives under the invitation file-server root, its directory name must
 also be secret; never store it at a guessable `dashboard.html` there. Keep the generated page and

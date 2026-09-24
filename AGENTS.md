@@ -35,3 +35,7 @@ Guide refresh uses `watch_link/guide.py` and resource-limited native systemd uni
 Private service start page: `watch_link/dashboard.py` renders `templates/dashboard.html` from a
 private JSON config. Never commit generated HTML containing capability links. Browser buttons
 copy/download launchers; they must not imply they can execute shell commands directly.
+
+Start-page configuration examples: `deploy/dashboard.example.json` and
+`deploy/start-page.Caddyfile.example`. Keep all reusable media implementation in this repository;
+VPS Workspaces remains responsible only for the linked workspace and shared backup infrastructure.
