@@ -23,7 +23,10 @@ network. PUID/PGID 0 inside the user namespace maps to the unprivileged host Doc
 do not use this identity configuration unchanged with a rootful daemon.
 
 1. Copy `.env.example` to `.env` and choose an existing writable `MEDIA_ROOT`, outside Mutagen.
-   Create `movies` and `torrents` beneath it on the same filesystem for hardlinks.
+   Create `movies`, `torrents/radarr`, and `torrents/incomplete` beneath it on the same filesystem
+   for hardlinks. The category directory must exist before Radarr checks the download client.
+   Verify both containers see and can write `/data/torrents/radarr`; matching mounts alone
+   do not create qBittorrent category directories.
 2. Start `docker compose up -d radarr prowlarr media-files`.
 3. Configure application authentication before publishing the dashboards. The deployment
    uses Caddy basic authentication and Radarr/Prowlarr External authentication. Direct
